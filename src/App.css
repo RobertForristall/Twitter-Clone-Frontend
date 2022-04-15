@@ -1,3 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Source+Serif+Pro&display=swap');
+
 .App {
+
+}
+
+/* Font CSS */
+
+.header-font {
+  font-family: 'Source Serif Pro', serif;
+}
+
+.button-font {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+/* Landing Pager */
+
+.white-bg {
+  background-color: white;
+}
+
+.landing-page-image {
+  position: fixed;
+  width: 45%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+}
+
+.landing-page-icon {
+  position: absolute;
+  display: flex;
+  border-radius: 50%;
+
+  width: 90px;
+  height: 90px;
+  left: 50%;
+  top: 120px;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #D5D1D1;
+}
+
+.center-item {
+  top: 50%;
+  left: 50%;
+}
+
+.landing-page-header {
+  position: absolute;
+
+  width: 30%;
+
+  left: 55%;
+  top: 300px;
+  font-size: 52px;
+}
+
+.landing-page-subhead {
+  position: absolute;
+
+  width: 30%;
+  left: 55%;
+  top: 500px;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.landing-page-button {
+  position: absolute;
+  width: 302px;
+  height: 62px;
+  left: 57%;
+  border: 0px;
+  background: #E9E7E7;
+  border-radius: 35px;
+}
+
+.landing-page-google {
+  top: 650px;
+}
+
+.landing-page-apple {
+  top: 750px;
+}
+
+.landing-page-email {
+  top: 900px;
+  background-color: aquamarine;
+}
+
+.landing-page-login {
+  top: 1100px;
+  color: rgb(26, 114, 144);
+}
+
+.landing-page-button:hover {
+  background: lightblue;
+}
+
+.button-inside {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.or-line {
+  position: absolute;
+  display: inline-block;
+  width: 325px;
+  height: 0px;
+  left: 56.5%;
+  top: 850px;;
+
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.or-text {
+  position: absolute;
+  display: flex;
+  background: white;
+  width: 50px;
+  height: 20px;
   text-align: center;
+  font-size: 20px;
+  top: 835px;
+  left: 63%;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-page-already {
+  position: absolute;
+
+  width: 30%;
+  left: 56%;
+  top: 1000px;
+  font-size: 30px;
+  font-weight: bold;
 }
