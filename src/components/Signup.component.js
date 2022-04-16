@@ -37,6 +37,7 @@ export default class Signup extends React.Component {
     }
 
     sendVerification(e) {
+        /* Handle Signup Step 1 */
         console.log('Clicked')
     }
 

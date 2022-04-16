@@ -1,6 +1,6 @@
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import Landing_Page from './pages/Landing_Page';
+import LandingPage from './pages/LandingPage';
 import Credentials from './pages/Credentials';
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Landing_Page />}/>
+          <Route path="/" element={<LandingPage />}/>
           <Route path="/signup" element={<Credentials page="signup"/>}/>
         </Routes>
       </Router>
