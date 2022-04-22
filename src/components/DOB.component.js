@@ -1,7 +1,7 @@
 import React from "react";
-import moment from "moment";
 import { range } from "../functions";
-import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
+import { Select, MenuItem, InputLabel } from "@mui/material";
+import { months, max_days, years } from "../constants";
 
 export default class DOB extends React.Component {
     constructor(props){
@@ -13,16 +13,6 @@ export default class DOB extends React.Component {
     }
 
     render () {
-
-        moment.locale('en')
-        const months = moment.monthsShort()
-        const max_days = [
-            31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-        ]
-        const current_year = new Date().getFullYear()
-        const years = range(current_year-120 , current_year).reverse()
-
-        
 
         let day_items
 

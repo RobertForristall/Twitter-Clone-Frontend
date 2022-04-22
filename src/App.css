@@ -211,6 +211,10 @@ col
   top: 375px;
 }
 
+.verify {
+  top: 300px;
+}
+
 .date-header{
   position: absolute;
   text-align: center;
@@ -249,6 +253,22 @@ col
 
 .next-button:hover {
   background-color: lightblue;
+}
+
+.signup-err-msg-1 {
+  position: absolute;
+  top: 150px;
+  width: 90%;
+  left: 35px;
+  text-align: center; 
+}
+
+.signup-validation-text {
+  position: absolute;
+  top: 150px;
+  width: 90%;
+  left: 35px;
+  text-align: center;
 }
 
 /* DOB Component */
