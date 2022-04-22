@@ -29,11 +29,16 @@ export default class LandingPage extends React.Component {
         this.setState({...this.state, flag: 'email'})
     }
 
+    onClickLogin(e) {
+        this.setState({...this.state, flag: 'login'})
+    }
+
     render() {
 
         let nav
 
         if (this.state.flag === 'email') nav = <Navigate to='/signup'/>
+        else if (this.state.flag === 'login') nav = <Navigate to='/login/false'/>
 
         return(
             <div className="white-bg">
@@ -67,7 +72,7 @@ export default class LandingPage extends React.Component {
                 <h3 className="header-font landing-page-already">
                     Already have an account?
                 </h3>
-                <button className="landing-page-button landing-page-login button-inside">
+                <button className="landing-page-button landing-page-login button-inside" onClick={this.onClickLogin.bind(this)}>
                     <p className="button-font">Login</p>
                 </button>
             </div>

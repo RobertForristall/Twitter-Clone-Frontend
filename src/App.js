@@ -10,6 +10,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />}/>
           <Route path="/signup" element={<Credentials page="signup"/>}/>
+          <Route path="/login/:from_signup" element={<Credentials page="login"/>}/>
         </Routes>
       </Router>
     </div>

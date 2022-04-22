@@ -1,7 +1,7 @@
 import React from "react";
 import { range } from "../functions";
 import { Select, MenuItem, InputLabel } from "@mui/material";
-import { months, max_days, years } from "../constants";
+import { months, years } from "../constants";
 
 export default class DOB extends React.Component {
     constructor(props){

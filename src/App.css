@@ -212,7 +212,7 @@ col
 }
 
 .verify {
-  top: 300px;
+  top: 400px;
 }
 
 .date-header{
@@ -263,6 +263,24 @@ col
   text-align: center; 
 }
 
+.signup-err-msg-2 {
+  position: absolute;
+  top: 250px;
+  width: 90%;
+  left: 35px;
+  text-align: center;
+  color: rgb(202, 68, 68); 
+}
+
+.signup-err-msg-3 {
+  position: absolute;
+  top: 200px;
+  width: 90%;
+  left: 35px;
+  text-align: center;
+  color: rgb(202, 68, 68); 
+}
+
 .signup-validation-text {
   position: absolute;
   top: 150px;
@@ -270,6 +288,36 @@ col
   left: 35px;
   text-align: center;
 }
+
+.signup-password-list {
+  position: absolute;
+  top: 300px;
+  left: 70px;
+  width: 50%;
+  text-align: center;
+}
+
+.signup-password-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 20px;
+}
+
+.signup-password-field {
+  position: absolute;
+  left: 35px;
+  width: 90%;
+}
+
+.field-1 {
+  top: 470px;
+}
+
+.field-2 {
+  top: 595px;
+}
+
 
 /* DOB Component */
 
