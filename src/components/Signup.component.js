@@ -16,7 +16,8 @@ export default class Signup extends React.Component {
             dob_day: 0,
             dob_year: 0,
             err_msg_1: '',
-            verification_code: ''
+            verification_code: '',
+            inputted_token: ''
         }
     }
 
@@ -56,11 +57,13 @@ export default class Signup extends React.Component {
     }
 
     onChangeVerification(e) {
-        this.setState({...this.state, verification_code: e.target.value})
+        this.setState({...this.state, inputted_token: e.target.value})
     }
 
     checkVerification(e) {
-        
+        if (this.state.verification_code === this.state.inputted_token) {
+            this.setState({...this.state, form_flag: 3, err_msg: ''})
+        }
     }
 
     render() {
@@ -132,6 +135,13 @@ export default class Signup extends React.Component {
                 <button className="next-button" onClick={this.checkVerification.bind(this)}>
                     Next
                 </button>
+            </div>
+        }
+        else if (this.state.form_flag === 3) {
+
+            form = <div>
+                <h1 className="credentials-header header-font">Singup to the Share Club!</h1>
+                <h2 className="signup-validation-text">Please enter and confirm your password</h2>
             </div>
         }
 
