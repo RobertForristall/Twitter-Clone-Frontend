@@ -13,7 +13,6 @@ import IconButton from '@mui/material/IconButton';
 import {hasUpper, hasLower, hasNumber, hasSpecial} from '../functions'
 import { check_list_text } from "../constants";
 import { sha256 } from "js-sha256";
-import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
 
