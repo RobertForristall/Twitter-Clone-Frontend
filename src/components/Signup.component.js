@@ -35,7 +35,7 @@ export default class Signup extends React.Component {
             show_pass: false,
             show_confirm: false,
             pass_flags: [false, false, false, false, false],
-            signed_up: false
+            signed_up: false,
         }
     }
 
@@ -61,17 +61,38 @@ export default class Signup extends React.Component {
 
     sendVerification(e) {
 
+        console.log(this.state.full_name.length)
+
+        // Make sure all fields on form are filled
+        if (this.state.full_name.length === 0 || this.state.email.length === 0) {
+            this.setState({...this.state, err_msg: 'Please fill in all fields!'})
+            return
+        }
+
+        if (this.state.dob_day === 0 || this.state.dob_month === 0 || this.state.dob_year === 0) {
+            this.setState({...this.state, err_msg: 'Please enter your date of birth!'})
+            return
+        }
+
+        // Call Email Check API
+        
+
         // Include DOB check
         //if ()
 
         // Create Token
         const token = '123456'
         
+        // JS
+        /*
         axios.get(base_address + '/users/sendVerification/' + this.state.email)
             .then(res => this.setState({...this.state, form_flag: 2, err_msg: '', verification_code: token}))
             //.then(res => this.setState({...this.state, err_msg_1: 'There is already an account associated with that email. Please use a different email or login with that email.'}))
             .catch(err => this.setState({...this.state, err_msg: err.response.data, verification_code: ''}))
-
+        */
+        
+        // Java
+        this.setState({...this.state, form_flag: 2, err_msg: '', verification_code: token})
     }
 
     onChangeVerification(e) {
@@ -126,15 +147,24 @@ export default class Signup extends React.Component {
             const new_user = {
                 email: this.state.email,
                 name: this.state.full_name,
+
                 dob: new Date(this.state.dob_year, this.state.dob_month-1, this.state.dob_day).toISOString().substring(0, 10),
+                
                 is_verified: this.state.inputted_token === this.state.verification_code ? true : false,
                 pass: sha256.create().update(this.state.pass).hex()
             }
 
+            // Node backend
+            /*
             axios.post(base_address + '/users/signup', new_user)
                 .then(res => this.setState({...this.state, err_msg: 'Signup Successful! Please return to landing page to login!'}))
                 .catch(err => this.setState({...this.state, err_msg: err.response.data}))
+            */
 
+            // Java backend
+            axios.post(base_address + '/user', new_user)
+                .then(res => console.log(res))
+                .catch(err => console.log(err))
         }
         else {
             if (this.state.pass !== this.state.confirm_pass) {
