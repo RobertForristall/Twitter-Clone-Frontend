@@ -4,6 +4,7 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 import { faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Navigate } from "react-router-dom";
+import Login from "../components/Login.component";
 
 export default class Credentials extends React.Component {
     constructor(props){
@@ -25,6 +26,7 @@ export default class Credentials extends React.Component {
         // Handle component flag
         if (this.state.page === 'landing') comp = <Navigate to='/'/>
         else if (this.state.page === 'signup') comp = <Signup />
+        else if (this.state.page === 'login') comp = <Login />
 
         return(
             <div className="credentials-bg">

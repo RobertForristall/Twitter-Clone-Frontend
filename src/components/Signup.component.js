@@ -70,7 +70,7 @@ export default class Signup extends React.Component {
         axios.get(base_address + '/users/sendVerification/' + this.state.email)
             .then(res => this.setState({...this.state, form_flag: 2, err_msg: '', verification_code: token}))
             //.then(res => this.setState({...this.state, err_msg_1: 'There is already an account associated with that email. Please use a different email or login with that email.'}))
-            .catch(err => this.setState({...this.state, err_msg_1: err.response.data, verification_code: ''}))
+            .catch(err => this.setState({...this.state, err_msg: err.response.data, verification_code: ''}))
 
     }
 
@@ -118,6 +118,9 @@ export default class Signup extends React.Component {
     }
 
     confirmPassword (e) {
+
+        e.preventDefault()
+
         if (this.state.pass_flags.every(v => v === true) && this.state.pass === this.state.confirm_pass){
 
             const new_user = {
@@ -128,11 +131,8 @@ export default class Signup extends React.Component {
                 pass: sha256.create().update(this.state.pass).hex()
             }
 
-            console.log(new_user.dob)
-            console.log(new_user.pass)
-
             axios.post(base_address + '/users/signup', new_user)
-                .then(res => this.setState({...this.state, signed_up: true}))
+                .then(res => this.setState({...this.state, err_msg: 'Signup Successful! Please return to landing page to login!'}))
                 .catch(err => this.setState({...this.state, err_msg: err.response.data}))
 
         }
@@ -229,7 +229,7 @@ export default class Signup extends React.Component {
 
             let nav
 
-            if (this.state.signed_up === true) nav = <Navigate to="/login/true"/>
+            if (this.state.signed_up === true) nav = <Navigate to="/login/from_signup"/>
 
             let msg
 
