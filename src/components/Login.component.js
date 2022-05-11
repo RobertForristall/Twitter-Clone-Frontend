@@ -58,12 +58,12 @@ export default function Login (props) {
         <button className="next-button" onClick={e => {
             let user = {
                 email: email,
-                pass: sha256.create().update(pass).hex()
+                pass: pass
             }
 
-            axios.post(base_address + '/users/login', user)
+            axios.post(base_address + '/user/login', user)
                 .then(res => console.log(res))
-                .catch(err => console.log(err.response.data))
+                .catch(err => console.log(err))
         }}>
             Login
         </button>
