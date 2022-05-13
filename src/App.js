@@ -12,7 +12,7 @@ function App() {
           <Route path="/" element={<LandingPage />}/>
           <Route path="/signup" element={<Credentials page="signup"/>}/>
           <Route path="/login/:from_signup" element={<Credentials page="login"/>}/>
-          <Route path='/dashboard/:token/:email' element = {<Dashboard />}/>
+          <Route path='/dashboard' element = {<Dashboard />}/>
         </Routes>
       </Router>
     </div>

@@ -62,7 +62,14 @@ export default function Login (props) {
             }
 
             axios.post(base_address + '/user/login', user)
-                .then(res => console.log(res))
+                .then(res => {
+                    const logged_user = {
+                        email: email,
+                        access_token: res.data.access_token,
+                        refresh_token: res.data.refresh_token
+                    }
+                    nav("/dashboard", {replace: true, state: logged_user})
+                })
                 .catch(err => console.log(err))
         }}>
             Login
