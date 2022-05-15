@@ -2,7 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Source+Serif+Pro&display=swap');
 
 .App {
-
+  display: flex;
+  justify-content: center;
 }
 
 /* Font CSS */
@@ -339,4 +340,65 @@ col
 
 .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
   max-height: 300px !important;
+}
+
+/* Dashboard Page */
+
+.dashboard {
+  position: absolute;
+  display: table;
+  width: 1400px;
+  height: 100%;
+  margin: 0 auto;
+
+}
+
+.dashboard-icon {
+  position: absolute;
+  top: 50px;
+  display: block;
+  left: 75px;
+}
+
+.dash-left-col {
+  position: absolute;
+  top: 150px;
+  left: 0px;
+  display: flex;
+  width: 200px;
+  height: 600px;
+  border: black 1px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dash-left-item {
+  display: block;
+  flex: auto;
+  text-align: center;
+  background: none;
+  border: none;
+  left: 0px;
+  width: 200px;
+}
+
+.dash-left-item:hover {
+  background-color: #B5B1B1;
+ border-radius: 35px;
+}
+
+.dash-middle-col {
+  left: 250px;
+  position: absolute;
+  top: 50px;
+  display: block;
+  width: 700px;
+}
+
+.dash-right-col {
+  left: 1000px;
+  position: absolute;
+  top: 50px;
+  display: block;
+  width: 400px;
 }

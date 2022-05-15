@@ -1,5 +1,8 @@
 import moment from "moment"
 import { range } from "./functions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse, faHashtag, faBell, faEnvelope, faBookmark, faList, faPerson, faEllipsis } from "@fortawesome/free-solid-svg-icons"
+
 
 moment.locale('en')
 
@@ -23,4 +26,39 @@ export const check_list_text = [
     'Contains a number',
     'Contains a special character',
     'Minimum length of 8'
+]
+
+export const left_col_content = [
+    {
+        icon: <FontAwesomeIcon icon={faHouse} size="2x"/>,
+        text: "Home"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faHashtag} size="2x"/>,
+        text: "Explore"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faBell} size="2x"/>,
+        text: "Notifications"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faEnvelope} size="2x"/>,
+        text: "Messages"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faBookmark} size="2x"/>,
+        text: "Bookmarks"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faList} size="2x"/>,
+        text: "Lists"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faPerson} size="2x"/>,
+        text: "Profile"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faEllipsis} size="2x"/>,
+        text: "More"
+    },
 ]
