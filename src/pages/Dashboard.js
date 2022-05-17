@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { base_address, left_col_content } from "../constants";
+import { base_address, left_col_content, tweet_share_icons } from "../constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGlobe } from "@fortawesome/free-solid-svg-icons";
-import { TextareaAutosize } from "@mui/material";
+import { faGlobe, faImage, faPoll, faCalendar, faMapLocation } from "@fortawesome/free-solid-svg-icons";
+import { TextareaAutosize, Tooltip } from "@mui/material";
 import { TextField } from "@mui/material";
+import Tweet from "../components/Tweet.component";
 
 export default function Dashboard (props) {
 
@@ -37,6 +38,23 @@ export default function Dashboard (props) {
         </button>
     })
 
+    let tweet_items = tweets.map(tweet => {
+        return <div>
+            <Tweet tweet={tweet} key={tweet.id}/>
+            <br></br>
+        </div>
+    })
+
+    let tweet_share_items = tweet_share_icons.map(item => {
+        return <Tooltip key={item.tooltip} title={<p style={{fontSize: "20px"}}>{item.tooltip}</p>}>
+            <span>
+                <button className="share-content-icon">
+                    {item.icon}
+                </button>
+            </span>
+        </Tooltip>
+    })
+
     return <div className="dashboard">
         <div className="dashboard-icon">
             <FontAwesomeIcon icon={faGlobe} size='4x'/>
@@ -51,7 +69,19 @@ export default function Dashboard (props) {
                 style={{width: "100%"}}
 
             />
-            <div></div>
+            <br />
+            <div>
+                {tweet_share_items}
+                <span className="share-tweet-btn">
+                    <button className="landing-page-button button-font">
+                        Share
+                    </button>
+                </span>
+            </div>
+            <div style={{marginBottom: "90px"}}></div>
+            <div>
+                {tweet_items}
+            </div>
         </div>
         <div className="dash-right-col">
             <TextField 

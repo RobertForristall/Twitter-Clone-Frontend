@@ -2,6 +2,7 @@ import moment from "moment"
 import { range } from "./functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faHashtag, faBell, faEnvelope, faBookmark, faList, faPerson, faEllipsis } from "@fortawesome/free-solid-svg-icons"
+import { faImage, faPoll, faCalendar, faMapLocation } from "@fortawesome/free-solid-svg-icons";
 
 
 moment.locale('en')
@@ -60,5 +61,28 @@ export const left_col_content = [
     {
         icon: <FontAwesomeIcon icon={faEllipsis} size="2x"/>,
         text: "More"
+    },
+]
+
+export const tweet_share_icons = [
+    {
+        icon: <FontAwesomeIcon icon={faImage} size='3x'/>,
+        tooltip: "Share Image"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faImage} size='3x'/>,
+        tooltip: "Share GIF"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faPoll} size='3x'/>,
+        tooltip: "Start Poll"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faCalendar} size='3x'/>,
+        tooltip: "Share Date"
+    },
+    {
+        icon: <FontAwesomeIcon icon={faMapLocation} size='3x'/>,
+        tooltip: "Share Location"
     },
 ]
