@@ -67,7 +67,7 @@ export const left_col_content = [
 export const tweet_share_icons = [
     {
         icon: <FontAwesomeIcon icon={faImage} size='3x'/>,
-        tooltip: "Share Image"
+        tooltip: "Share Image",
     },
     {
         icon: <FontAwesomeIcon icon={faImage} size='3x'/>,
