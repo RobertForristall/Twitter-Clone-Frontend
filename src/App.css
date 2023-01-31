@@ -30,7 +30,7 @@
 
 col
 
-/* Landing Pager */
+/* Landing Page */
 
 .white-bg {
   background-color: white;
@@ -52,7 +52,7 @@ col
   width: 90px;
   height: 90px;
   left: 50%;
-  top: 120px;
+  top: 70px;
 
   align-items: center;
   justify-content: center;
@@ -71,8 +71,8 @@ col
   width: 30%;
 
   left: 55%;
-  top: 300px;
-  font-size: 52px;
+  top: 150px;
+  font-size: 40px;
 }
 
 .landing-page-subhead {
@@ -80,8 +80,8 @@ col
 
   width: 30%;
   left: 55%;
-  top: 500px;
-  font-size: 40px;
+  top: 280px;
+  font-size: 32px;
   font-weight: bold;
 }
 
@@ -96,20 +96,20 @@ col
 }
 
 .landing-page-google {
-  top: 650px;
+  top: 400px;
 }
 
 .landing-page-apple {
-  top: 750px;
+  top: 500px;
 }
 
 .landing-page-email {
-  top: 900px;
+  top: 650px;
   background-color: aquamarine;
 }
 
 .landing-page-login {
-  top: 1100px;
+  top: 800px;
   color: rgb(26, 114, 144);
 }
 
@@ -127,7 +127,7 @@ col
 .or-line {
   position: absolute;
   left: 55%;
-  top: 840px;;
+  top: 590px;;
 }
 
 .or-text {
@@ -148,9 +148,9 @@ col
   position: absolute;
 
   width: 30%;
-  left: 56%;
-  top: 1000px;
-  font-size: 30px;
+  left: 58%;
+  top: 720px;
+  font-size: 24px;
   font-weight: bold;
 }
 
