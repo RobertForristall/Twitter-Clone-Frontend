@@ -10,10 +10,10 @@ moment.locale('en')
 const current_year = new Date().getFullYear()
 
 // JS
-//export const base_address = 'http://localhost:5000'
+export const base_address = 'http://localhost:5000'
 
 // Java
-export const base_address = 'http://localhost:8080/api/v1'
+//export const base_address = 'http://localhost:8080/api/v1'
 
 export const months = moment.monthsShort()
 export const max_days = [

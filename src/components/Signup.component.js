@@ -84,15 +84,15 @@ export default class Signup extends React.Component {
         const token = '123456'
         
         // JS
-        /*
+        
         axios.get(base_address + '/users/sendVerification/' + this.state.email)
             .then(res => this.setState({...this.state, form_flag: 2, err_msg: '', verification_code: token}))
             //.then(res => this.setState({...this.state, err_msg_1: 'There is already an account associated with that email. Please use a different email or login with that email.'}))
             .catch(err => this.setState({...this.state, err_msg: err.response.data, verification_code: ''}))
-        */
+        
         
         // Java
-        this.setState({...this.state, form_flag: 2, err_msg: '', verification_code: token})
+        //this.setState({...this.state, form_flag: 2, err_msg: '', verification_code: token})
     }
 
     onChangeVerification(e) {
@@ -155,16 +155,16 @@ export default class Signup extends React.Component {
             }
 
             // Node backend
-            /*
+            
             axios.post(base_address + '/users/signup', new_user)
                 .then(res => this.setState({...this.state, err_msg: 'Signup Successful! Please return to landing page to login!'}))
                 .catch(err => this.setState({...this.state, err_msg: err.response.data}))
-            */
+            
 
             // Java backend
-            axios.post(base_address + '/user', new_user)
+            /*axios.post(base_address + '/user', new_user)
                 .then(res => console.log(res))
-                .catch(err => console.log(err))
+            */    .catch(err => console.log(err))
         }
         else {
             if (this.state.pass !== this.state.confirm_pass) {

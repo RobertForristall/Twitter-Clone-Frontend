@@ -58,15 +58,20 @@ export default function Login (props) {
         <button className="next-button" onClick={e => {
             let user = {
                 email: email,
-                pass: pass
+                pass: sha256.create().update(pass).hex()
             }
 
-            axios.post(base_address + '/user/login', user)
+            console.log(user.pass)
+
+            axios.post(base_address + '/users/login', user)
                 .then(res => {
                     const logged_user = {
                         email: email,
-                        access_token: res.data.access_token,
-                        refresh_token: res.data.refresh_token
+                        //access_token: res.data.access_token,
+                        //refresh_token: res.data.refresh_token
+                        token: res.data.token,
+                        name: res.data.name,
+                        dob: res.data.dob
                     }
                     nav("/dashboard", {replace: true, state: logged_user})
                 })
