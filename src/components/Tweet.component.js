@@ -7,8 +7,8 @@ import { base_address } from "../constants";
 
 export default function Tweet (props) {
 
-    const [liked, setLiked] = useState(false)
-    const [flag, setFlag] = useState(false)
+    const [liked, setLiked] = useState(props.like_flag)
+    const [flag, setFlag] = useState(props.retweet_flag)
 
     const onClickLike = (e) => {
 

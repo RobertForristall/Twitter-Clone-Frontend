@@ -26,7 +26,30 @@ export default function Dashboard (props) {
     const [file_info, setFileInfo] = useState({
         name: "None Selected",
         type: "N/A",
-    }) 
+    })
+
+    const generateTweets = (data) => {
+        let tweets = data[0]
+        let likes = data[1]
+        let retweets = data[2]
+    
+        return tweets.map(tweet => {
+            let like_flag = false
+            let retweet_flag = false
+            if (likes.find(element => element.tweet_id == tweet.tweet_id) !== undefined) like_flag = true
+            if (retweets.find(element => element.tweet_id == tweet.tweet_id) !== undefined) retweet_flag = true
+            return <div key={tweet.tweet_id}>
+                <Tweet 
+                    tweet={tweet}
+                    token={state.token}
+                    user_id={state.user_id}
+                    like_flag={like_flag}
+                    retweet_flag={retweet_flag}
+                />
+                <br></br>
+            </div>
+        })
+    }
 
     useEffect(() => {
         console.log("Getting Tweets...")
@@ -37,12 +60,7 @@ export default function Dashboard (props) {
         })
         .then(res => {
             console.log(res.data)
-            setTweets(res.data[0].map(tweet => {
-                return <div key={tweet.tweet_id}>
-                    <Tweet tweet={tweet} token={state.token} user_id={state.user_id}/>
-                    <br></br>
-                </div>
-            }))
+            setTweets(generateTweets(res.data))
             //setTweets(res.data)
         })
         .catch(err => {
