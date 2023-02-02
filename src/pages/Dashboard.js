@@ -13,20 +13,79 @@ export default function Dashboard (props) {
     const [state, setState] = useState(useLocation().state)
     const [tweets, setTweets] = useState([])
     const [new_tweet, setNewTweet] = useState({
-        email: state.email,
+        //email: state.email,
+        user_id: state.user_id,
         msg: "",
         sharedContent: "None",
         likes: 0,
         retweets: 0,
         datePosted: new Date(),
-        originalPosterId: state.email,
-        fileKey: ""
+        originalPoster: state.user_id,
+       //fileKey: ""
     })
     const [file_info, setFileInfo] = useState({
         name: "None Selected",
         type: "N/A",
-    })
+    }) 
 
+    useEffect(() => {
+        console.log("Getting Tweets...")
+        axios.get(base_address + '/tweets/' + state.user_id, {
+            headers: {
+                authorization: "Bearer " + state.token
+            }
+        })
+        .then(res => {
+            console.log(res.data)
+            setTweets(res.data[0].map(tweet => {
+                return <div key={tweet.tweet_id}>
+                    <Tweet tweet={tweet} token={state.token} user_id={state.user_id}/>
+                    <br></br>
+                </div>
+            }))
+            //setTweets(res.data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }, [state.email, state.token, state.user_id])
+
+    const onClickShare = (e) => {
+
+        const req = {
+            tweet: new_tweet,
+            file: file_info
+        }
+
+        axios.post(base_address + "/tweets/add", req, {
+            headers: {
+                authorization: "Bearer " + state.token
+            }
+        })
+        .then(res => {
+            console.log("Tweet Added!")
+            setTweets(tweets.concat(
+                <div key={-99}>
+                    <Tweet tweet={{...new_tweet, email: state.email}} token={state.token} user_id={state.user_id}/>
+                    <br></br>
+                </div>
+            ))
+            setNewTweet({
+                //email: state.email,
+                user_id: state.user_id,
+                msg: "",
+                sharedContent: "None",
+                likes: 0,
+                retweets: 0,
+                datePosted: new Date(),
+                originalPoster: state.user_id,
+            })
+        })
+        .catch(err => {console.log(err)})
+    }
+
+    /*
+    Java Backend
     useEffect(() => {
         console.log("Getting tweets...")
         axios.get(base_address + "/tweet/email", {
@@ -42,7 +101,7 @@ export default function Dashboard (props) {
             setTweets(res.data)
         })
     }, [state.email, state.access_token])
-
+    
     const onClickShare = (e) => {
         const req = {
             tweet: {...new_tweet, fileKey: file_info.name},
@@ -60,21 +119,13 @@ export default function Dashboard (props) {
         })
         .catch(err => {console.log(err)})
     }
-
-
+    */
 
     let left_col_items =  left_col_content.map(item => {
         return <button className="dash-left-item" key={item.text}>
             <span>{item.icon}</span>
             <span className="button-font">{item.text}</span>
         </button>
-    })
-
-    let tweet_items = tweets.map(tweet => {
-        return <div key={tweet.id}>
-            <Tweet tweet={tweet}/>
-            <br></br>
-        </div>
     })
 
     let tweet_share_items = tweet_share_icons.map(item => {
@@ -137,7 +188,9 @@ export default function Dashboard (props) {
             </div>
             <div style={{marginBottom: "90px"}}></div>
             <div>
-                {tweet_items}
+                {
+                tweets
+                }
             </div>
         </div>
         <div className="dash-right-col">

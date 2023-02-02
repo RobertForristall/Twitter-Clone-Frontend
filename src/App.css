@@ -432,8 +432,8 @@ col
   background: none;
   border: none;
   border-radius: 50%;
-  width: 90px;
-  height: 90px;
+  width: 60px;
+  height: 60px;
 }
 
 .round-button:hover {
@@ -443,6 +443,23 @@ col
 .tweet-msg {
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.like-retweet-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.like-button {
+  background: none;
+  border: none;
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+.like-button:hover {
+  border: 1px solid black;
 }
 
 .share-content-icon {

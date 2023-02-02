@@ -71,8 +71,10 @@ export default function Login (props) {
                         //refresh_token: res.data.refresh_token
                         token: res.data.token,
                         name: res.data.name,
-                        dob: res.data.dob
+                        dob: res.data.dob,
+                        user_id: res.data.user_id
                     }
+                    console.log(logged_user)
                     nav("/dashboard", {replace: true, state: logged_user})
                 })
                 .catch(err => console.log(err))
