@@ -38,7 +38,7 @@ export default function Dashboard (props) {
             let retweet_flag = false
             if (likes.find(element => element.tweet_id == tweet.tweet_id) !== undefined) like_flag = true
             if (retweets.find(element => element.tweet_id == tweet.tweet_id) !== undefined) retweet_flag = true
-            return <div key={tweet.tweet_id}>
+            return <div key={`T${tweet.tweet_id}U${tweet.user_id}`}>
                 <Tweet 
                     tweet={tweet}
                     token={state.token}

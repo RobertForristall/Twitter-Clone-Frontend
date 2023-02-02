@@ -1,14 +1,16 @@
 import React, {useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp as normal_thumb, faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
-import { faThumbsUp as liked_thumb } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp as normal_thumb, faShareFromSquare as normal_share } from "@fortawesome/free-regular-svg-icons";
+import { faThumbsUp as liked_thumb, faShareFromSquare as retweeted_share } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios"
 import { base_address } from "../constants";
+import { Tooltip } from "@mui/material";
 
 export default function Tweet (props) {
 
     const [liked, setLiked] = useState(props.like_flag)
-    const [flag, setFlag] = useState(props.retweet_flag)
+    const [retweeted, setRetweeted] = useState(props.retweet_flag)
+    const [err_flag, setError] = useState(false)
 
     const onClickLike = (e) => {
 
@@ -29,6 +31,37 @@ export default function Tweet (props) {
         .catch(err => {console.log(err)})
     }
 
+    const onClickRetweet = (e) => {
+
+        const req = {
+            retweet: {
+                tweet_id: props.tweet.tweet_id,
+                user_id: props.user_id
+            },
+            tweet: (({email, ...o}) => ({...o, user_id: props.user_id, retweets: props.tweet.retweets+1}))(props.tweet)
+        }
+
+        console.log(req)
+    
+        axios.post(base_address+'/tweets/retweet/add', req, {
+            headers: {
+                authorization: "Bearer " + props.token
+            }
+        })
+        .then(res => {
+            console.log(res)
+            props.tweet.retweets += 1
+            setRetweeted(!retweeted)
+        })
+        .catch(err => {
+            console.log(err.response.data.errno)
+            if (err.response.data.errno === 1062) {
+                setError(true)
+            }
+        })
+     
+    }
+
     let thumb_up
 
     if (!liked) {
@@ -37,6 +70,20 @@ export default function Tweet (props) {
     else {
         thumb_up = <FontAwesomeIcon icon={liked_thumb}/>
     }
+
+    let share_button
+
+    if (!retweeted){
+        share_button = <FontAwesomeIcon icon={normal_share}/>
+    }
+    else {
+        share_button = <FontAwesomeIcon icon={retweeted_share}/>
+    }
+
+    let like_msg = liked ? "Liked!" : "Like?"
+    let retweet_msg = retweeted ? "Shared!" : "Share?"
+
+    if (err_flag) retweet_msg = "Already Shared!"
 
     return <div className="tweet-container">
         <span>
@@ -51,13 +98,17 @@ export default function Tweet (props) {
         </span>
         <p className="tweet-msg tweet-font">{props.tweet.msg}</p>
         <p className="like-retweet-buttons">
-            <button onClick={onClickLike} className="like-button">
-                {thumb_up}
-            </button>
+            <Tooltip title={<p style={{fontSize: "10px"}}>{like_msg}</p>}  placement="top">
+                <button onClick={onClickLike} className="like-button">
+                    {thumb_up}
+                </button>
+            </Tooltip>
             {props.tweet.likes}
-            <button className="like-button">
-                <FontAwesomeIcon icon={faShareFromSquare}/>
-            </button>
+            <Tooltip title={<p style={{fontSize: "10px"}}>{retweet_msg}</p>} placement="top">
+                <button onClick={onClickRetweet} className="like-button">
+                    {share_button}
+                </button>
+            </Tooltip>
             {props.tweet.retweets}
             <span style={{marginRight: '20px'}}></span>
         </p>

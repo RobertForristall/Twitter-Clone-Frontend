@@ -74,7 +74,7 @@ export default function Login (props) {
                         dob: res.data.dob,
                         user_id: res.data.user_id
                     }
-                    console.log(logged_user)
+                    
                     nav("/dashboard", {replace: true, state: logged_user})
                 })
                 .catch(err => console.log(err))
