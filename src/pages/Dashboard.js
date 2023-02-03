@@ -7,6 +7,7 @@ import { faGlobe, faImage, faPoll, faCalendar, faMapLocation } from "@fortawesom
 import { TextareaAutosize, Tooltip } from "@mui/material";
 import { TextField } from "@mui/material";
 import Tweet from "../components/Tweet.component";
+import FormData from 'form-data'
 
 export default function Dashboard (props) {
 
@@ -26,6 +27,11 @@ export default function Dashboard (props) {
     const [file_info, setFileInfo] = useState({
         name: "None Selected",
         type: "N/A",
+    })
+    const [poll_data, setPollData] = useState({
+        question: "",
+        num_answers: 0,
+        choices: []
     })
 
     const generateTweets = (data) => {
@@ -75,12 +81,33 @@ export default function Dashboard (props) {
             file: file_info
         }
 
+        let data = new FormData();
+        data.append('file', file_info, file_info.name)
+        data.append('user_id', state.user_id)
+
+        console.log(req.file)
+
+        if (req.tweet.sharedContent === "Image" || req.tweet.sharedContent === "GIF"){
+            axios.post(base_address+'/tweets/image/add', data, {
+                headers: {
+                    authorization: 'Bearer ' + state.token,
+                    'accept': 'application/json',
+                    'Accept-Language': 'en-US,en;q=0.8',
+                    'Content-Type': `multipart/form-data; boundary=${data._boundary}`
+                }
+            })
+            .then(res => {console.log(res)})
+            .catch(err => {console.log(err)})
+            
+        }
+
         axios.post(base_address + "/tweets/add", req, {
             headers: {
                 authorization: "Bearer " + state.token
             }
         })
         .then(res => {
+
             console.log("Tweet Added!")
             setTweets(tweets.concat(
                 <div key={-99}>
@@ -174,8 +201,61 @@ export default function Dashboard (props) {
             <p>File type: {file_info.type}</p>
             <br></br>
             <p>Please upload an {new_tweet.sharedContent} file below:</p>
-            <input type="file" onChange={e => {setFileInfo(e.target.files[0])}} accept=".jpg, .png"/>
+            <input type="file" onChange={e => {setFileInfo(e.target.files[0])}} accept={
+                new_tweet.sharedContent === "Image" ? ".jpg, .png" : ".gif"
+            }/>
             <div>{pic_preview}</div>
+        </div>
+    }
+    else if (new_tweet.sharedContent === "Poll") {
+
+        let answer_inputs = poll_data.choices.map((element, index) => {
+
+            let temp_choices = poll_data.choices
+
+            return <div>
+                <p className="file-upload-inline-text">Choice {index+1}: </p>
+                <input 
+                    type={"text"}
+                    onChange={e => {
+                        temp_choices[index] = e.target.value
+                        setPollData({...poll_data, choices: temp_choices})
+                    }}
+                    className='file-upload-input'
+                    style={{width: '400px'}}
+                />
+            </div>
+        })
+
+        file_upload = <div className="file-upload">
+            <div>
+                <p className="file-upload-inline-text">Please enter the question: </p>
+                <input 
+                    type={"text"}
+                    onChange={e => {setPollData({...poll_data, question: e.target.value})}}
+                    className='file-upload-input'
+                    style={{width: '400px'}}
+                />
+            </div>
+            <div>
+                <p className="file-upload-inline-text">How many choices: </p>
+                <select 
+                    onChange={e => {setPollData({...poll_data, num_answers: parseInt(e.target.value), choices: Array(parseInt(e.target.value)).fill(0)})}}
+                    defaultValue={0}
+                    className='file-upload-input'
+                >
+                    <option disabled value={0}>Test</option>
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={3}>3</option>
+                    <option value={4}>4</option>
+                    <option value={5}>5</option>
+                    <option value={6}>6</option>
+                </select>
+            </div>
+            <div style={{marginBottom: '40px'}}>
+                {answer_inputs}
+            </div>
         </div>
     }
 

@@ -474,3 +474,13 @@ col
 .share-tweet-btn {
   text-align: right;
 }
+
+.file-upload-inline-text {
+  display: inline-block;
+  font-size: large;
+}
+
+.file-upload-input {
+  display: inline-block;
+  margin-left: 20px;
+}
