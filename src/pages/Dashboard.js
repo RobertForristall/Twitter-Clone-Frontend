@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { base_address, left_col_content, tweet_share_icons } from "../constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGlobe, faImage, faPoll, faCalendar, faMapLocation } from "@fortawesome/free-solid-svg-icons";
+import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { TextareaAutosize, Tooltip } from "@mui/material";
 import { TextField } from "@mui/material";
 import Tweet from "../components/Tweet.component";
@@ -11,8 +11,21 @@ import FormData from 'form-data'
 
 export default function Dashboard (props) {
 
+    /* Main state for holding the user's information passed in form the login component:
+     - email, str, user's email
+     - token, str, JWT access token for the user
+     - name, str, name of the user
+     - dob, Date, user's date of birth
+     - user_id, int, user's id in the database
+    */ 
     const [state, setState] = useState(useLocation().state)
+    
+    /* 
+        Array of tweets that is populated in useEffect
+    */
     const [tweets, setTweets] = useState([])
+
+    // New tweet data structure
     const [new_tweet, setNewTweet] = useState({
         //email: state.email,
         user_id: state.user_id,
@@ -22,18 +35,26 @@ export default function Dashboard (props) {
         retweets: 0,
         datePosted: new Date(),
         originalPoster: state.user_id,
-       //fileKey: ""
+        fileKey: ""
     })
+
+    // File info data structure to be used with sharing
+    // image and GIF content
     const [file_info, setFileInfo] = useState({
         name: "None Selected",
         type: "N/A",
     })
+
+    // Poll data structure to be used with sharing poll content
     const [poll_data, setPollData] = useState({
         question: "",
         num_answers: 0,
         choices: []
     })
 
+    // Helper function to generate the array of Tweet components
+    // - data, arr, array of 3 elements containing tweet data,
+    //   like data for the user, and retweet data for the user
     const generateTweets = (data) => {
         let tweets = data[0]
         let likes = data[1]
@@ -42,8 +63,8 @@ export default function Dashboard (props) {
         return tweets.map(tweet => {
             let like_flag = false
             let retweet_flag = false
-            if (likes.find(element => element.tweet_id == tweet.tweet_id) !== undefined) like_flag = true
-            if (retweets.find(element => element.tweet_id == tweet.tweet_id) !== undefined) retweet_flag = true
+            if (likes.find(element => element.tweet_id === tweet.tweet_id) !== undefined) like_flag = true
+            if (retweets.find(element => element.tweet_id === tweet.tweet_id) !== undefined) retweet_flag = true
             return <div key={`T${tweet.tweet_id}U${tweet.user_id}`}>
                 <Tweet 
                     tweet={tweet}
@@ -57,6 +78,7 @@ export default function Dashboard (props) {
         })
     }
 
+    // UseEffect function to call api on mount to get tweets to populate the dashboard
     useEffect(() => {
         console.log("Getting Tweets...")
         axios.get(base_address + '/tweets/' + state.user_id, {
@@ -74,59 +96,72 @@ export default function Dashboard (props) {
         })
     }, [state.email, state.token, state.user_id])
 
+    // Function to handle haring a new tweet, uses an array of promises to handle shared content
     const onClickShare = (e) => {
 
-        const req = {
-            tweet: new_tweet,
-            file: file_info
-        }
+        let promise_arr = []
+        let req = {tweet: new_tweet}
+        
+        if (new_tweet.sharedContent === "Image" || new_tweet.sharedContent === "GIF"){
+            let data = new FormData();
+            data.append('file', file_info, file_info.name)
+            data.append('user_id', state.user_id)
 
-        let data = new FormData();
-        data.append('file', file_info, file_info.name)
-        data.append('user_id', state.user_id)
+            const url_image = base_address+'/tweets/image/add'
 
-        console.log(req.file)
-
-        if (req.tweet.sharedContent === "Image" || req.tweet.sharedContent === "GIF"){
-            axios.post(base_address+'/tweets/image/add', data, {
-                headers: {
-                    authorization: 'Bearer ' + state.token,
-                    'accept': 'application/json',
-                    'Accept-Language': 'en-US,en;q=0.8',
-                    'Content-Type': `multipart/form-data; boundary=${data._boundary}`
-                }
-            })
-            .then(res => {console.log(res)})
-            .catch(err => {console.log(err)})
-            
-        }
-
-        axios.post(base_address + "/tweets/add", req, {
-            headers: {
-                authorization: "Bearer " + state.token
+            const image_headers = {
+                authorization: 'Bearer ' + state.token,
+                'accept': 'application/json',
+                'Accept-Language': 'en-US,en;q=0.8',
+                'Content-Type': `multipart/form-data; boundary=${data._boundary}`
             }
-        })
-        .then(res => {
 
-            console.log("Tweet Added!")
-            setTweets(tweets.concat(
-                <div key={-99}>
-                    <Tweet tweet={{...new_tweet, email: state.email}} token={state.token} user_id={state.user_id}/>
-                    <br></br>
-                </div>
-            ))
-            setNewTweet({
-                //email: state.email,
-                user_id: state.user_id,
-                msg: "",
-                sharedContent: "None",
-                likes: 0,
-                retweets: 0,
-                datePosted: new Date(),
-                originalPoster: state.user_id,
+            promise_arr.push(axios.post(url_image, data, {headers: image_headers}))
+            req.tweet = {...new_tweet, fileKey: `T${state.user_id}+I${file_info.name}`}
+        }
+
+        if (new_tweet.sharedContent === "Poll") {
+
+        }
+
+        if (new_tweet.sharedContent === "Date") {
+
+        }
+
+        if (new_tweet.sharedContent === "Location") {
+
+        }
+
+        let tweet_headers = {
+            authorization: 'Bearer ' + state.token,
+        }
+
+        promise_arr.push(axios.post(base_address+'/tweets/add', req, {headers: tweet_headers}))
+
+        Promise.all(promise_arr)
+            .then(res => {
+                console.log(res)
+                setTweets(tweets.concat(
+                    <div key={-99}>
+                        <Tweet tweet={{...req, email: state.email}} token={state.token} user_id={state.user_id}/>
+                        <br></br>
+                    </div>
+                ))
+                setNewTweet({
+                    //email: state.email,
+                    user_id: state.user_id,
+                    msg: "",
+                    sharedContent: "None",
+                    likes: 0,
+                    retweets: 0,
+                    datePosted: new Date(),
+                    originalPoster: state.user_id,
+                })
             })
-        })
-        .catch(err => {console.log(err)})
+            .catch(err => {
+                console.log(err)
+            })
+
     }
 
     /*
@@ -166,6 +201,7 @@ export default function Dashboard (props) {
     }
     */
 
+    // Buttons for navigation on the left side of the dashboard
     let left_col_items =  left_col_content.map(item => {
         return <button className="dash-left-item" key={item.text}>
             <span>{item.icon}</span>
@@ -173,6 +209,7 @@ export default function Dashboard (props) {
         </button>
     })
 
+    // Buttons for selecting to share specific content in a tweet
     let tweet_share_items = tweet_share_icons.map(item => {
         return <Tooltip key={item.tooltip} title={<p style={{fontSize: "20px"}}>{item.tooltip}</p>}>
             <span>
@@ -190,11 +227,12 @@ export default function Dashboard (props) {
         </Tooltip>
     })
 
+    // Initalize file variables for image/GIF shared content to show a preview of the image
     let file_upload
     let pic_preview
-
     if (file_info.name !== "None Selected") pic_preview = <img src={URL.createObjectURL(file_info)} alt="" style={{maxHeight: "300px", maxWidth: "300px"}}/>
 
+    // New tweet's share image/GIF content
     if (new_tweet.sharedContent === "Image" || new_tweet.sharedContent === "GIF"){
         file_upload = <div className="file-upload">
             <p>Chosen file: {file_info.name}</p>
@@ -207,6 +245,8 @@ export default function Dashboard (props) {
             <div>{pic_preview}</div>
         </div>
     }
+
+    // New tweet's share poll content
     else if (new_tweet.sharedContent === "Poll") {
 
         let answer_inputs = poll_data.choices.map((element, index) => {
@@ -259,6 +299,7 @@ export default function Dashboard (props) {
         </div>
     }
 
+    // render elements
     return <div className="dashboard">
         <div className="dashboard-icon">
             <FontAwesomeIcon icon={faGlobe} size='4x'/>

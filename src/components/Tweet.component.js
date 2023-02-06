@@ -5,6 +5,7 @@ import { faThumbsUp as liked_thumb, faShareFromSquare as retweeted_share } from 
 import axios from "axios"
 import { base_address } from "../constants";
 import { Tooltip } from "@mui/material";
+import { Buffer } from 'buffer'
 
 export default function Tweet (props) {
 
@@ -85,6 +86,16 @@ export default function Tweet (props) {
 
     if (err_flag) retweet_msg = "Already Shared!"
 
+    let content_container
+    if (props.tweet.sharedContent === 'Image' || props.tweet.sharedContent === 'GIF') {
+
+        const src_string = "data:image/png;base64," + props.tweet.image
+
+        content_container = <div>
+            <img src={src_string} style={{maxWidth: '300px', maxHeight: '300px'}}/>
+        </div>
+    }
+
     return <div className="tweet-container">
         <span>
             <button className="round-button" style={{display: 'inline-block'}}>
@@ -97,6 +108,7 @@ export default function Tweet (props) {
             <h2 style={{display: 'inline-block'}}>{props.tweet.email}</h2>
         </span>
         <p className="tweet-msg tweet-font">{props.tweet.msg}</p>
+        {content_container}
         <p className="like-retweet-buttons">
             <Tooltip title={<p style={{fontSize: "10px"}}>{like_msg}</p>}  placement="top">
                 <button onClick={onClickLike} className="like-button">
