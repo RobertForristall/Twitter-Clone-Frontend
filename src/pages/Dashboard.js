@@ -64,7 +64,7 @@ export default function Dashboard (props) {
         let likes = data[1]
         let retweets = data[2]
     
-        return tweets.map(tweet => {
+        return tweets.map((tweet, index) => {
             let like_flag = false
             let retweet_flag = false
             if (likes.find(element => element.tweet_id === tweet.tweet_id) !== undefined) like_flag = true
@@ -76,6 +76,9 @@ export default function Dashboard (props) {
                     user_id={state.user_id}
                     like_flag={like_flag}
                     retweet_flag={retweet_flag}
+                    onClickDelete={onClickDelete}
+                    onClickEdit={onClickEdit}
+                    index={index}
                 />
                 <br></br>
             </div>
@@ -171,6 +174,30 @@ export default function Dashboard (props) {
                 console.log(err)
             })
 
+    }
+
+    const onClickDelete = (e, i, id) => {
+        console.log(`Deleting tweet with index ${i} and id ${id}`)
+        const url = `${base_address}/tweets/delete/${id}/${state.user_id}`
+        axios.delete(url, {
+            headers: {
+                authorization: 'Bearer ' + state.token
+            }
+        })
+        .then(res => {
+            console.log(res)
+            let temp = tweets
+            temp.splice(i, 1)
+            setTweets(temp)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
+    }
+
+    const onClickEdit = (e, i, id) => {
+        console.log(`Editing tweet with index ${i} and id ${id}`)
     }
 
     /*

@@ -34,12 +34,14 @@ export default function Tweet (props) {
 
     const onClickRetweet = (e) => {
 
+        let new_fileKey = (props.tweet.sharedContent === "Image" || props.tweet.sharedContent === "GIF") ? props.tweet.fileKey : ""
+
         const req = {
             retweet: {
                 tweet_id: props.tweet.tweet_id,
                 user_id: props.user_id
             },
-            tweet: (({email, ...o}) => ({...o, user_id: props.user_id, retweets: props.tweet.retweets+1}))(props.tweet)
+            tweet: (({email, ...o}) => ({...o, user_id: props.user_id, retweets: props.tweet.retweets+1, fileKey: new_fileKey}))(props.tweet)
         }
 
         console.log(req)
@@ -94,12 +96,12 @@ export default function Tweet (props) {
     if (props.user_id === props.tweet.user_id) {
         edit_buttons = <div style={{display: 'inline-flex'}}>
             <Tooltip title={<p style={{fontSize: "10px"}}>Edit</p>}>
-                <button onClick={onClickEdit}>
+                <button onClick={(e) => props.onClickEdit(e, props.index, props.tweet.tweet_id)}>
                     <FontAwesomeIcon icon={faEdit}/>
                 </button>
             </Tooltip>
             <Tooltip title={<p style={{fontSize: "10px"}}>Delete</p>}>
-                <button onClick={onClickDelete}>
+                <button onClick={(e) => props.onClickDelete(e, props.index, props.tweet.tweet_id)}>
                     <FontAwesomeIcon icon={faRectangleXmark}/>
                 </button>
             </Tooltip>
