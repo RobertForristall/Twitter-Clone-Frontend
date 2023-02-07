@@ -8,6 +8,7 @@ import { TextareaAutosize, Tooltip } from "@mui/material";
 import { TextField } from "@mui/material";
 import Tweet from "../components/Tweet.component";
 import FormData from 'form-data'
+import { Buffer } from "buffer";
 
 export default function Dashboard (props) {
 
@@ -51,6 +52,9 @@ export default function Dashboard (props) {
         num_answers: 0,
         choices: []
     })
+
+    // Date data structure to be used with sharing date content
+    const [date_data, setDateData] = useState(new Date())
 
     // Helper function to generate the array of Tweet components
     // - data, arr, array of 3 elements containing tweet data,
@@ -117,7 +121,7 @@ export default function Dashboard (props) {
             }
 
             promise_arr.push(axios.post(url_image, data, {headers: image_headers}))
-            req.tweet = {...new_tweet, fileKey: `T${state.user_id}+I${file_info.name}`}
+            req.tweet = {...new_tweet, fileKey: `user_${state.user_id}/images/${file_info.name}`}
         }
 
         if (new_tweet.sharedContent === "Poll") {
@@ -141,9 +145,14 @@ export default function Dashboard (props) {
         Promise.all(promise_arr)
             .then(res => {
                 console.log(res)
+                let image = ""
+                if (req.tweet.sharedContent === 'Image' || req.tweet.sharedContent === 'GIF') {
+                    image = new Buffer.from(file_info.stream).toString('base64')
+                    console.log(image)
+                }
                 setTweets(tweets.concat(
                     <div key={-99}>
-                        <Tweet tweet={{...req, email: state.email}} token={state.token} user_id={state.user_id}/>
+                        <Tweet tweet={{...req.tweet, email: state.email, image: image}} token={state.token} user_id={state.user_id}/>
                         <br></br>
                     </div>
                 ))

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp as normal_thumb, faShareFromSquare as normal_share } from "@fortawesome/free-regular-svg-icons";
+import { faThumbsUp as normal_thumb, faShareFromSquare as normal_share, faEdit, faRectangleXmark } from "@fortawesome/free-regular-svg-icons";
 import { faThumbsUp as liked_thumb, faShareFromSquare as retweeted_share } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios"
 import { base_address } from "../constants";
@@ -63,22 +63,47 @@ export default function Tweet (props) {
      
     }
 
-    let thumb_up
+    const onClickEdit = (e) => {
 
-    if (!liked) {
-        thumb_up = <FontAwesomeIcon icon={normal_thumb}/>
-    }
-    else {
-        thumb_up = <FontAwesomeIcon icon={liked_thumb}/>
     }
 
-    let share_button
-
-    if (!retweeted){
-        share_button = <FontAwesomeIcon icon={normal_share}/>
+    const onClickDelete = (e) => {
+        
     }
-    else {
-        share_button = <FontAwesomeIcon icon={retweeted_share}/>
+
+    const thumb_up = <FontAwesomeIcon icon={(!liked ? normal_thumb : liked_thumb)}/>
+
+    //if (!liked) {
+    //    thumb_up = <FontAwesomeIcon icon={normal_thumb}/>
+    //}
+    //else {
+    //    thumb_up = <FontAwesomeIcon icon={liked_thumb}/>
+    //}
+
+    const share_button = <FontAwesomeIcon icon={(!retweeted ? normal_share : retweeted_share)}/>
+
+    //if (!retweeted){
+    //    share_button = <FontAwesomeIcon icon={normal_share}/>
+    //}
+    //else {
+    //    share_button = <FontAwesomeIcon icon={retweeted_share}/>
+    //}
+
+    let edit_buttons
+
+    if (props.user_id === props.tweet.user_id) {
+        edit_buttons = <div style={{display: 'inline-flex'}}>
+            <Tooltip title={<p style={{fontSize: "10px"}}>Edit</p>}>
+                <button onClick={onClickEdit}>
+                    <FontAwesomeIcon icon={faEdit}/>
+                </button>
+            </Tooltip>
+            <Tooltip title={<p style={{fontSize: "10px"}}>Delete</p>}>
+                <button onClick={onClickDelete}>
+                    <FontAwesomeIcon icon={faRectangleXmark}/>
+                </button>
+            </Tooltip>
+        </div>
     }
 
     let like_msg = liked ? "Liked!" : "Like?"
@@ -109,6 +134,7 @@ export default function Tweet (props) {
         </span>
         <p className="tweet-msg tweet-font">{props.tweet.msg}</p>
         {content_container}
+        {edit_buttons}
         <p className="like-retweet-buttons">
             <Tooltip title={<p style={{fontSize: "10px"}}>{like_msg}</p>}  placement="top">
                 <button onClick={onClickLike} className="like-button">
