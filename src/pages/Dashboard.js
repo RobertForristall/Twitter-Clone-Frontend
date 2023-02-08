@@ -63,6 +63,7 @@ export default function Dashboard (props) {
         let tweets = data[0]
         let likes = data[1]
         let retweets = data[2]
+        let polls = data[3]
     
         return tweets.map((tweet, index) => {
             let like_flag = false
@@ -79,6 +80,7 @@ export default function Dashboard (props) {
                     onClickDelete={onClickDelete}
                     onClickEdit={onClickEdit}
                     index={index}
+                    poll={(tweet.sharedContent === "Poll") ? polls[tweet.tweet_id] : null}
                 />
                 <br></br>
             </div>
@@ -128,7 +130,12 @@ export default function Dashboard (props) {
         }
 
         if (new_tweet.sharedContent === "Poll") {
-
+            let poll = {question: poll_data.question}
+            poll_data.choices.forEach((choice, index) => {
+                poll[`c_${index+1}`] = choice
+                poll[`r_${index+1}`] = 0
+            })
+            req = {...req, poll: poll}
         }
 
         if (new_tweet.sharedContent === "Date") {
@@ -145,13 +152,14 @@ export default function Dashboard (props) {
 
         promise_arr.push(axios.post(base_address+'/tweets/add', req, {headers: tweet_headers}))
 
+        console.log(req)
+
         Promise.all(promise_arr)
             .then(res => {
                 console.log(res)
                 let image = ""
                 if (req.tweet.sharedContent === 'Image' || req.tweet.sharedContent === 'GIF') {
                     image = new Buffer.from(file_info.stream).toString('base64')
-                    console.log(image)
                 }
                 setTweets(tweets.concat(
                     <div key={-99}>
@@ -289,7 +297,7 @@ export default function Dashboard (props) {
 
             let temp_choices = poll_data.choices
 
-            return <div>
+            return <div key={index}>
                 <p className="file-upload-inline-text">Choice {index+1}: </p>
                 <input 
                     type={"text"}
@@ -321,7 +329,6 @@ export default function Dashboard (props) {
                     className='file-upload-input'
                 >
                     <option disabled value={0}>Test</option>
-                    <option value={1}>1</option>
                     <option value={2}>2</option>
                     <option value={3}>3</option>
                     <option value={4}>4</option>

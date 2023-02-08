@@ -65,34 +65,11 @@ export default function Tweet (props) {
      
     }
 
-    const onClickEdit = (e) => {
-
-    }
-
-    const onClickDelete = (e) => {
-        
-    }
-
     const thumb_up = <FontAwesomeIcon icon={(!liked ? normal_thumb : liked_thumb)}/>
-
-    //if (!liked) {
-    //    thumb_up = <FontAwesomeIcon icon={normal_thumb}/>
-    //}
-    //else {
-    //    thumb_up = <FontAwesomeIcon icon={liked_thumb}/>
-    //}
 
     const share_button = <FontAwesomeIcon icon={(!retweeted ? normal_share : retweeted_share)}/>
 
-    //if (!retweeted){
-    //    share_button = <FontAwesomeIcon icon={normal_share}/>
-    //}
-    //else {
-    //    share_button = <FontAwesomeIcon icon={retweeted_share}/>
-    //}
-
     let edit_buttons
-
     if (props.user_id === props.tweet.user_id) {
         edit_buttons = <div style={{display: 'inline-flex'}}>
             <Tooltip title={<p style={{fontSize: "10px"}}>Edit</p>}>
@@ -121,6 +98,21 @@ export default function Tweet (props) {
         content_container = <div>
             <img src={src_string} style={{maxWidth: '300px', maxHeight: '300px'}}/>
         </div>
+    }
+    else if (props.tweet.sharedContent === 'Poll'){
+
+        content_container = <div style={{marginLeft: '30px'}}>
+            <h1 style={{}}>{props.poll.question}</h1>
+            {props.poll.choice_arr.map((choice, index) => {
+                if (choice !== null){
+                    return <div key={index}>
+                        <p>{choice}</p>
+                        <button>{index+1}</button>
+                    </div>
+                }
+            })}
+        </div>
+
     }
 
     return <div className="tweet-container">
