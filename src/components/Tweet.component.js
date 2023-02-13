@@ -107,7 +107,9 @@ export default function Tweet (props) {
                 if (choice !== null){
                     return <div key={index}>
                         <p>{choice}</p>
-                        <button>{index+1}</button>
+                        <button onClick={e => {
+                            props.onClickPollOption(e, props.index, props.tweet.tweet_id)
+                        }} value={index+1}>{index+1}</button>
                     </div>
                 }
             })}

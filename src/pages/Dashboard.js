@@ -71,19 +71,24 @@ export default function Dashboard (props) {
             let retweet_flag = false
             if (likes.find(element => element.tweet_id === tweet.tweet_id) !== undefined) like_flag = true
             if (retweets.find(element => element.tweet_id === tweet.tweet_id) !== undefined) retweet_flag = true
-            return <div key={`T${tweet.tweet_id}U${tweet.user_id}`}>
-                <Tweet 
-                    tweet={tweet}
-                    token={state.token}
-                    user_id={state.user_id}
-                    like_flag={like_flag}
-                    retweet_flag={retweet_flag}
-                    onClickDelete={onClickDelete}
-                    onClickEdit={onClickEdit}
-                    index={index}
-                />
-                <br></br>
-            </div>
+            return {
+                like_flag: like_flag,
+                retweet_flag: retweet_flag,
+                html: <div key={`T${tweet.tweet_id}U${tweet.user_id}`}>
+                    <Tweet 
+                        tweet={tweet}
+                        token={state.token}
+                        user_id={state.user_id}
+                        like_flag={like_flag}
+                        retweet_flag={retweet_flag}
+                        onClickDelete={onClickDelete}
+                        onClickEdit={onClickEdit}
+                        onClickPollOption={onClickPollOption}
+                        index={index}
+                    />
+                    <br></br>
+                </div>
+            }
         })
     }
 
@@ -97,7 +102,9 @@ export default function Dashboard (props) {
         })
         .then(res => {
             console.log(res.data)
-            setTweets(generateTweets(res.data))
+            let temp = generateTweets(res.data)
+            let html_arr = temp.map(element => {return element.html})
+            setTweets({tweets_list: res.data[0], tweets_html: generateTweets(res.data), html_arr: html_arr})
             //setTweets(res.data)
         })
         .catch(err => {
@@ -144,7 +151,7 @@ export default function Dashboard (props) {
 
         if (new_tweet.sharedContent === "Date") {
             req = {...req, sharedContent: date_data}
-            sharedContent = {date_data: date_data}
+            sharedContent = {date_data: date_data.toISOString.substring(0,10)}
         }
 
         if (new_tweet.sharedContent === "Location") {
@@ -169,12 +176,12 @@ export default function Dashboard (props) {
                 }
                 let prop_tweet = {...req.tweet, ...sharedContent, email: state.email, image: image}
                 console.log(prop_tweet)
-                setTweets(tweets.concat(
+                setTweets({...tweets, html_arr: tweets.html_arr.concat(
                     <div key={-99}>
                         <Tweet tweet={prop_tweet} token={state.token} user_id={state.user_id}/>
                         <br></br>
                     </div>
-                ))
+                )})
                 setNewTweet({
                     //email: state.email,
                     user_id: state.user_id,
@@ -203,7 +210,9 @@ export default function Dashboard (props) {
         .then(res => {
             console.log(res)
             let temp = tweets
-            temp.splice(i, 1)
+            temp.tweets_html.splice(i, 1)
+            temp.tweets_list.splice(i, 1)
+            temp.html_arr.splice(i, 1)
             setTweets(temp)
         })
         .catch(err => {
@@ -214,6 +223,41 @@ export default function Dashboard (props) {
 
     const onClickEdit = (e, i, id) => {
         console.log(`Editing tweet with index ${i} and id ${id}`)
+    }
+
+    const onClickPollOption = (e, i, id) => {
+        const req = {content_id: id, user_id: state.user_id, choice: e.target.value}
+        axios.post(base_address+'/tweets/poll', req, {
+            headers:{authorization: 'Bearer ' + state.token}
+        })
+        .then(res => {
+            console.log('Poll Counted!')
+            let temp = tweets
+            temp.tweets_list[i][`r_${toString(e.target.value)}`] += 1
+            temp.tweets_html[i] = {
+                like_flag: temp.tweets.html[i].like_flag,
+                retweet_flag: temp.tweets.html[i].retweet_flag,
+                html: <div key={`T${id}U${state.user_id}`}>
+                    <Tweet 
+                        tweet={temp.tweets_list[i]}
+                        token={state.token}
+                        user_id={state.user_id}
+                        like_flag={temp.tweets_html[i].like_flag}
+                        retweet_flag={temp.tweets_html[i].retweet_flag}
+                        onClickDelete={onClickDelete}
+                        onClickEdit={onClickEdit}
+                        onClickPollOption={onClickPollOption}
+                        index={i}
+                    />
+                    <br></br>
+                </div>
+            }
+            temp.html_arr[i] = temp.tweets_html[i].html
+            setTweets(temp)
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     /*
@@ -379,7 +423,7 @@ export default function Dashboard (props) {
             <div style={{marginBottom: "90px"}}></div>
             <div>
                 {
-                tweets
+                    tweets.html_arr
                 }
             </div>
         </div>
