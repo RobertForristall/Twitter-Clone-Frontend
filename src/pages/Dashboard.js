@@ -56,6 +56,8 @@ export default function Dashboard (props) {
     // Date data structure to be used with sharing date content
     const [date_data, setDateData] = useState(new Date())
 
+    const [location_data, setLocationData] = useState('')
+
     // Helper function to generate the array of Tweet components
     // - data, arr, array of 3 elements containing tweet data,
     //   like data for the user, and retweet data for the user
@@ -63,7 +65,6 @@ export default function Dashboard (props) {
         let tweets = data[0]
         let likes = data[1]
         let retweets = data[2]
-        let polls = data[3]
     
         return tweets.map((tweet, index) => {
             let like_flag = false
@@ -80,7 +81,6 @@ export default function Dashboard (props) {
                     onClickDelete={onClickDelete}
                     onClickEdit={onClickEdit}
                     index={index}
-                    poll={(tweet.sharedContent === "Poll") ? polls[tweet.tweet_id] : null}
                 />
                 <br></br>
             </div>
@@ -110,6 +110,7 @@ export default function Dashboard (props) {
 
         let promise_arr = []
         let req = {tweet: new_tweet}
+        let sharedContent = {}
         
         if (new_tweet.sharedContent === "Image" || new_tweet.sharedContent === "GIF"){
             let data = new FormData();
@@ -131,19 +132,24 @@ export default function Dashboard (props) {
 
         if (new_tweet.sharedContent === "Poll") {
             let poll = {question: poll_data.question}
+            let choice_arr = []
             poll_data.choices.forEach((choice, index) => {
                 poll[`c_${index+1}`] = choice
                 poll[`r_${index+1}`] = 0
+                choice_arr.push(poll[`c_${index+1}`])
             })
-            req = {...req, poll: poll}
+            req = {...req, sharedContent: poll}
+            sharedContent = {...poll, choice_arr: choice_arr}
         }
 
         if (new_tweet.sharedContent === "Date") {
-
+            req = {...req, sharedContent: date_data}
+            sharedContent = {date_data: date_data}
         }
 
         if (new_tweet.sharedContent === "Location") {
-
+            req = {...req, sharedContent: location_data}
+            sharedContent = {location_data: location_data}
         }
 
         let tweet_headers = {
@@ -161,9 +167,11 @@ export default function Dashboard (props) {
                 if (req.tweet.sharedContent === 'Image' || req.tweet.sharedContent === 'GIF') {
                     image = new Buffer.from(file_info.stream).toString('base64')
                 }
+                let prop_tweet = {...req.tweet, ...sharedContent, email: state.email, image: image}
+                console.log(prop_tweet)
                 setTweets(tweets.concat(
                     <div key={-99}>
-                        <Tweet tweet={{...req.tweet, email: state.email, image: image}} token={state.token} user_id={state.user_id}/>
+                        <Tweet tweet={prop_tweet} token={state.token} user_id={state.user_id}/>
                         <br></br>
                     </div>
                 ))

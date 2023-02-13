@@ -102,8 +102,8 @@ export default function Tweet (props) {
     else if (props.tweet.sharedContent === 'Poll'){
 
         content_container = <div style={{marginLeft: '30px'}}>
-            <h1 style={{}}>{props.poll.question}</h1>
-            {props.poll.choice_arr.map((choice, index) => {
+            <h1 style={{}}>{props.tweet.question}</h1>
+            {props.tweet.choice_arr.map((choice, index) => {
                 if (choice !== null){
                     return <div key={index}>
                         <p>{choice}</p>
